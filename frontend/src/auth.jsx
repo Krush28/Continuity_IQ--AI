@@ -8,8 +8,11 @@ export function AuthProvider({ children }) {
   const [ready, setReady] = useState(false)
 
   useEffect(() => {
-    if (!getToken()) { setReady(true); return }
-    api('/auth/me').then(setUser).catch(() => setToken(null)).finally(() => setReady(true))
+    const demo = () => api('/auth/demo', { method: 'POST' })
+      .then((r) => { setToken(r.token); setUser(r.user); if (window.location.pathname === '/' || window.location.pathname === '/login') window.history.replaceState(null, '', '/projects/1') })
+      .catch(() => {})
+    if (!getToken()) { demo().finally(() => setReady(true)); return }
+    api('/auth/me').then(setUser).catch(() => { setToken(null); return demo() }).finally(() => setReady(true))
   }, [])
 
   const signIn = async (path, body) => {

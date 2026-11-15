@@ -3,6 +3,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
 from ..auth import create_token, current_user, hash_password, verify_password
+from ..config import settings
 from ..db import get_db
 from ..models import User
 
@@ -49,3 +50,14 @@ def login(body: LoginIn, db: Session = Depends(get_db)):
 @router.get("/me")
 def me(user: User = Depends(current_user)):
     return user_out(user)
+
+
+@router.post("/demo")
+def demo_login(db: Session = Depends(get_db)):
+    """Public demo only: open the app straight away as the demo manager, no login screen."""
+    if not settings.DEMO_MODE:
+        raise HTTPException(404, "Not available")
+    u = db.query(User).filter_by(email="manager@demo.in").first()
+    if not u:
+        raise HTTPException(404, "Demo user missing")
+    return {"token": create_token(u), "user": user_out(u)}
