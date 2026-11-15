@@ -8,6 +8,10 @@ from .db import Base, engine
 from .routers import agents, auth, documents, handover, projects, records, settings_api, voice_insights
 
 Base.metadata.create_all(bind=engine)
+if settings.SEED_DEMO:
+    from .demo import seed
+
+    seed()
 
 app = FastAPI(title="ContinuityIQ API", version="1.0.0",
               description="Project knowledge & handover management with agentic GenAI and an offline rules engine.")

@@ -39,6 +39,10 @@ class Settings:
     LLM_BASE_URL = os.getenv("LLM_BASE_URL", "")
     LLM_TIMEOUT = float(os.getenv("LLM_TIMEOUT", "90"))
 
+    # Hosted demo: SEED_DEMO loads the demo project at start; DEMO_MODE locks the shared AI settings.
+    SEED_DEMO = os.getenv("SEED_DEMO", "false").lower() == "true"
+    DEMO_MODE = os.getenv("DEMO_MODE", "false").lower() == "true"
+
     FRONTEND_DIST = BASE_DIR.parent / "frontend" / "dist"
 
 

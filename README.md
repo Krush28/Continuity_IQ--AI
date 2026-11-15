@@ -59,6 +59,12 @@ uploads/  original files, linked from every record
 
 The agent loop uses plain JSON (`{"thought","action","args"}`) rather than vendor-specific tool calling, so it works with small **local models via Ollama** as well as hosted APIs.
 
+## Deploy (public link)
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Krush28/Continuity_IQ--AI)
+
+`render.yaml` deploys it on Render's free plan. The demo project loads automatically on every start (`SEED_DEMO=true`), and shared AI settings are locked (`DEMO_MODE=true`). A `Dockerfile` is included for Hugging Face Spaces, Railway or any Docker host.
+
 ## Run it (one command after setup)
 
 Requirements: Python 3.11+ and Node 18+.

@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from ..auth import current_user
+from ..config import settings
 from ..db import get_db
 from ..llm import DEFAULTS, LLM, LLMError, load_config
 from ..models import AppSetting, User
@@ -34,6 +35,8 @@ def get_ai(db: Session = Depends(get_db), user: User = Depends(current_user)):
 def set_ai(body: AIConfigIn, db: Session = Depends(get_db), user: User = Depends(current_user)):
     if user.role != "manager":
         raise HTTPException(403, "Only managers can change AI settings")
+    if settings.DEMO_MODE:
+        raise HTTPException(403, "AI settings are locked on this public demo. Run your own copy to change them.")
     if body.provider not in DEFAULTS:
         raise HTTPException(422, "Unknown provider")
     values = {"llm_provider": body.provider, "llm_model": body.model.strip(), "llm_base_url": body.base_url.strip()}
